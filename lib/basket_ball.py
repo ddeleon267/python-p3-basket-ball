@@ -1,3 +1,5 @@
+import ipdb
+
 def game_dict():
     return {
         "home": {
@@ -182,3 +184,70 @@ def game_dict():
             ]
         }
     }
+
+###### helpers #####
+def teams_list():
+    return [value for key, value in game_dict().items()]
+
+def get_player_by_name(name):
+    for team in teams_list():
+        for p in team["players"]:
+            if p["name"] == name:
+                return p
+
+def get_team_by_name(team_name):
+    for team in teams_list():
+        if team["team_name"] == team_name:
+            return team
+#####################
+
+def num_points_per_game(name):
+    player = get_player_by_name(name)
+    return player["points_per_game"]
+
+def player_age(name):
+    player = get_player_by_name(name)
+    return player["age"]
+
+def team_colors(team_name):
+    team = get_team_by_name(team_name)
+    return team["colors"]
+
+def team_names():
+    return [team["team_name"] for team in teams_list()]
+
+def player_numbers(team_name):
+    team = get_team_by_name(team_name)
+    return [player["number"] for player in team["players"]]
+
+
+def player_stats(name): ## redundant but it makes the tests happy
+    return get_player_by_name(name)
+
+def average_rebounds_by_shoe_brand():
+    brand_dict = {}
+    for team in teams_list():
+        for p in team["players"]:
+            # more python-esque
+            try: 
+                brand_dict[p["shoe_brand"]].append(p["rebounds_per_game"])
+            except:
+                brand_dict[p["shoe_brand"]] = [p["rebounds_per_game"]]
+
+            # if p["shoe_brand"] in brand_dict:
+            #     brand_dict[p["shoe_brand"]].append(p["rebounds_per_game"])
+            # else:
+            #     brand_dict[p["shoe_brand"]] = []
+            #     brand_dict[p["shoe_brand"]].append(p["rebounds_per_game"])
+    
+    for brand, brands in brand_dict.items():
+        # print("brand is", brand)
+        # print("brands is", brands)
+        list_sum = sum(brands, 0)
+        length = len(brands)
+        avg = list_sum / length
+        format_avg = "{:.2f}".format(avg)
+        print(f"{brand}:  {format_avg}")
+
+            
+            
